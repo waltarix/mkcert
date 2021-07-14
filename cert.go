@@ -21,8 +21,6 @@ import (
 	"net"
 	"net/mail"
 	"net/url"
-	"os"
-	"os/user"
 	"path/filepath"
 	"regexp"
 	"strconv"
@@ -35,16 +33,7 @@ import (
 var userAndHostname string
 
 func init() {
-	u, err := user.Current()
-	if err == nil {
-		userAndHostname = u.Username + "@"
-	}
-	if h, err := os.Hostname(); err == nil {
-		userAndHostname += h
-	}
-	if err == nil && u.Name != "" && u.Name != u.Username {
-		userAndHostname += " (" + u.Name + ")"
-	}
+	userAndHostname = "nobody@nowhere"
 }
 
 func (m *mkcert) makeCert(hosts []string) {
