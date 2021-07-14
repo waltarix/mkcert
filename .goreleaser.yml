@@ -1,0 +1,38 @@
+---
+project_name: mkcert
+
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - binary: mkcert
+    targets:
+      - linux_amd64
+      - darwin_amd64
+      - darwin_arm64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s
+      - -w
+      - -X main.Version={{ .RawVersion }}
+      - -X main.Revision={{ if .IsSnapshot }}{{ .ShortCommit }}{{ else }}custom{{ end }}
+    env:
+      - CGO_ENABLED=0
+
+archives:
+  - name_template: "{{ .ProjectName }}-{{ .RawVersion }}-{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    format: tar.xz
+    wrap_in_directory: "true"
+    files:
+      - none*
+
+snapshot:
+  name_template: "{{ .Tag }}-devel"
+
+checksum:
+  disable: true
+
+changelog:
+  skip: true

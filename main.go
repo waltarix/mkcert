@@ -83,6 +83,7 @@ const advancedUsage = `Advanced options:
 // which is "(devel)" when building from within the module. See
 // golang.org/issue/29814 and golang.org/issue/29228.
 var Version string
+var Revision string
 
 func main() {
 	if len(os.Args) == 1 {
@@ -116,7 +117,11 @@ func main() {
 	}
 	if *versionFlag {
 		if Version != "" {
-			fmt.Println(Version)
+			if len(Revision) > 0 {
+				fmt.Printf("%s (%s)\n", Version, Revision)
+			} else {
+				fmt.Println(Version)
+			}
 			return
 		}
 		if buildInfo, ok := debug.ReadBuildInfo(); ok {
